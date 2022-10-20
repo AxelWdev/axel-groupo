@@ -8,20 +8,25 @@ import { Card, Button, Icon, Confirm } from 'semantic-ui-react';
 
 
 
-function DeleteButton({ postId, callback }){
+function DeleteButton({ postId, commentId, callback }){
     const [ confirmOpen, setConfirmOpen] = useState(false);
 
-    const[deletePost] = useMutation(DELETE_POST_MUTATION, {
+    const mutation = commentId ? DELETE_COMMENT_MUTATION : DELETE_POST_MUTATION;
+
+    const[deletePostOrMutation] = useMutation(mutation, {
         variables: { 
-            postId
+            postId,
+            commentId
         },
         update(proxy, res) {
             setConfirmOpen(false);
-            const data = proxy.readQuery({
+            if(!commentId){
+                const data = proxy.readQuery({
                 query: FETCH_POSTS_QUERY,
             });
         res = data.getPosts.filter((p) => p.id !== postId);
         proxy.writeQuery({ query: FETCH_POSTS_QUERY, data: { getPosts: res } });
+            }
         if (callback) callback();
     }
     })
@@ -38,8 +43,8 @@ function DeleteButton({ postId, callback }){
                 <Confirm
                     open={confirmOpen}
                     onCancel={() =>setConfirmOpen(false)}
-                    onConfirm={deletePost}
-                    content='Êtes-vous sûr(e) de vouloir supprimer ce post ?'
+                    onConfirm={deletePostOrMutation}
+                    content='Confirmer la suppression ?'
                     cancelButton='Annuler'
                     confirmButton="Supprimer" />
             </Card.Content>
@@ -53,6 +58,19 @@ const DELETE_POST_MUTATION = gql`
 
         
     }
+`;
+
+const DELETE_COMMENT_MUTATION = gql`
+    mutation deleteComment($postId: ID!, $commentId: ID!){
+        deleteComment(postId: $postId, commentId: $commentId){
+            id
+            comments{
+                id username createdAt body
+            }
+            commentCount
+        }
+    }
 `
+
 
 export default DeleteButton;
