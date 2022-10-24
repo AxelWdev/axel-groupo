@@ -1,6 +1,9 @@
 const { gql } = require('apollo-server');
 
+
+
 module.exports = gql`
+    scalar Upload
     type Post {
         id: ID!
         body: String!
@@ -10,6 +13,9 @@ module.exports = gql`
         likes: [Like]!
         likeCount: Int!
         commentCount: Int!
+    }
+    type File {
+        url: String!
     }
     type Comment{
         id: ID!
@@ -38,6 +44,7 @@ module.exports = gql`
     type Query{
         getPosts: [Post]
         getPost(postId: ID!): Post
+        hello: String!
     }
     type Mutation{
         register(registerInput: RegisterInput): User!
@@ -47,5 +54,6 @@ module.exports = gql`
         createComment(postId:String!, body:String!): Post!
         deleteComment(postId: ID!, commentId: ID!): Post!
         likePost(postId: ID!): Post!
+        uploadFile(file: Upload!): File!
     }
 `;

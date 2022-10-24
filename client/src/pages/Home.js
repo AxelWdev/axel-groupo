@@ -5,6 +5,7 @@ import { Grid, Transition } from 'semantic-ui-react'
 
 import PostCard from '../components/PostCard'
 import PostForm from '../components/PostForm'
+import UploadForm from '../components/UploadForm'
 import { FETCH_POSTS_QUERY } from '../util/graphql'
 
 function Home(){
@@ -23,6 +24,7 @@ function Home(){
                     
                         <Grid.Column>
                             <PostForm/>
+                            <UploadForm/>
                         </Grid.Column>
                     
                     { loading ? (
