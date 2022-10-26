@@ -1,22 +1,46 @@
-const { ApolloServer } = require('apollo-server');
+const { ApolloServer } = require('apollo-server-express');
+const express = require('express');
+const {
+  GraphQLUpload, // The GraphQL "Upload" Scalar
+  graphqlUploadExpress, // The Express middleware.
+} = require('graphql-upload');
+
+
 const mongoose = require('mongoose');
+const cors = require("cors");
 require('dotenv').config();
 
 const typeDefs = require('./graphql/typeDefs')
-const resolvers=require('./graphql/resolvers');
+const resolvers = require('./graphql/resolvers');
+
+
 
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
+    uploads: false,
     context: ({ req }) => ({req})
 });
 
-mongoose.connect(process.env.MONGO_DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(()=>{
-        console.log('MongoDB Connected');
-        return server.listen({port: 5000})
-    .then(res => {
-        console.log(`Server is running at ${res.url}`);
-    });
-    })
+const app = express(); 
+app.use(graphqlUploadExpress()); 
+
+server.applyMiddleware({ app }); 
+app.use(cors());
+app.use(express.static('public'));
+
+
+
+
+
+mongoose.connect(process.env.MONGO_DB_URI,
+    { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connexion à MongoDB réussie !'))
+    .catch(() => console.log('Connexion à MongoDB échouée !')
+);
+
+
+app.listen({ port: 5000}, () => {
+    console.log(`Server ready at http://localhost:5000`);
+})

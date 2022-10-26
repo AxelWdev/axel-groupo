@@ -52,8 +52,10 @@ function SinglePost(props) {
             comments, 
             likes, 
             likeCount, 
-            commentCount
+            commentCount,
+            url
         } = getPost;
+        console.log(getPost) 
 
         postMarkup = (
             <Grid style={{marginTop: 20}}>
@@ -63,7 +65,15 @@ function SinglePost(props) {
                             <Card.Content>
                                 <Card.Header>{username}</Card.Header>
                                 <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
-                                <Card.Description>{body}</Card.Description>
+                                <Card.Description>
+                                    {body}
+                                    
+                                </Card.Description>
+                                <div className="flex-center">
+                                        <div className="post-image-container-single">
+                                            <img src={url} alt='post' className="post-image-single"></img>
+                                        </div>
+                                    </div>
                             </Card.Content>
                             <hr/>
                             <Card.Content extra>
@@ -145,7 +155,7 @@ const SUBMIT_COMMENT_MUTATION = gql`
 const FETCH_POSTS_QUERY = gql`
     query($postId: ID!){
         getPost(postId: $postId){
-            id body createdAt username likeCount
+            id body url createdAt username likeCount
             likes{
                 username
             }

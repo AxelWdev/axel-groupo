@@ -35,7 +35,7 @@ function MenuBar() {
         <div>
             <Menu pointing secondary size="massive">
             <Menu.Item
-                name={user.username}
+                name='accueil'
                 active
                 as={Link}
                 to='/'

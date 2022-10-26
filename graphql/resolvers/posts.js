@@ -29,18 +29,20 @@ module.exports = {
         }
     },
     Mutation: {
-        async createPost(_, { body }, context){
+        async createPost(_, { body, url }, context){
             const user = checkAuth(context);
             
-            if(body.trim() === ''){
-                throw new Error('Le post ne doit pas être vide')
+            if(body.trim() === '' || url.trim() === ''){
+                throw new Error('Le post doit contenir du texte et une image')
             }
+
 
             const newPost = new Post({
                 body,
                 user: user.id,
                 username:user.username,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                url
             });
 
             const post = await newPost.save();
