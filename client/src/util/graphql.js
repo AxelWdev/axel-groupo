@@ -5,6 +5,7 @@ export const FETCH_POSTS_QUERY = gql`
         getPosts {
             id
             body
+            url
             createdAt
             username
             likeCount

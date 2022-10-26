@@ -13,7 +13,7 @@ moment.locale('fr');
 
 
 function PostCard({ 
-  post: {body, createdAt, id, username, likeCount, commentCount, likes} 
+  post: {body, createdAt, id, username, likeCount, commentCount, likes, url} 
 }) {
 
     const { user } = useContext(AuthContext);
@@ -29,7 +29,12 @@ function PostCard({
         />
         <Card.Header>{username}</Card.Header>
         <Card.Meta >{moment(createdAt).fromNow(true)}</Card.Meta>
-        <Card.Description>{body}</Card.Description>
+        <Card.Description>
+          {body}
+          <div className="post-image-container">
+            <img src={url} alt='post' className="post-image"></img>
+          </div>
+        </Card.Description>
       </Card.Content>
       <Card.Content extra>
         <LikeButton user={user} post={{id, likes, likeCount}}/>

@@ -11,11 +11,12 @@ function PostForm(){
     const { user } = useContext(AuthContext);
 
     const {values, onChange, onSubmit } = useForm(createPostCallback, {
-        body: ''
+        body: '',
+        url:''
     });
 
     const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
-        variables: values,
+        variables: { body: values.body, url: values.url},
         update(proxy, result) {
         const data = proxy.readQuery({
             query: FETCH_POSTS_QUERY,
@@ -27,8 +28,32 @@ function PostForm(){
             },
         });
         values.body = "";
+        values.url = "";
         },
     });
+
+    
+    
+    const [uploadFile] = useMutation(UPLOAD_FILE, {
+        onCompleted(data){
+            values.url = data.uploadFile.url;
+            console.log(values.url)
+            console.log(values)
+        }
+
+    })
+
+    const handleFileChange = e => {
+        const file = e.target.files[0]
+        if(!file) return
+        uploadFile({variables: { file }})
+    }
+
+
+    
+        
+    
+
 
     function createPostCallback(){
         createPost()
@@ -46,10 +71,17 @@ function PostForm(){
                     value={values.body}
                     error={error ? true : false}
                     />
+                <div className="submit-text-image-button">
                 <Button type="submit" color="teal">
                     Envoyer
                 </Button>
+                
+            
+            <input type="file" onChange={handleFileChange} />
+            </div>
+
             </Form.Field>
+            
         </Form>
         {error && (
             <div className="ui error message" style={{marginBottom: 20}}>
@@ -68,9 +100,9 @@ function PostForm(){
 }
 
 const CREATE_POST_MUTATION = gql`
-mutation createPost($body: String!){
-    createPost(body: $body) {
-        id body createdAt username
+mutation createPost($body: String!, $url:String!){
+    createPost(body: $body, url: $url) {
+        id body url createdAt username
         likes{
             id username createdAt
         }
@@ -81,6 +113,14 @@ mutation createPost($body: String!){
         commentCount
     }
 }
+`
+
+const UPLOAD_FILE = gql`
+    mutation uploadFile($file: Upload!){
+        uploadFile(file: $file){
+            url
+        }
+    }
 `
 
 export default PostForm
