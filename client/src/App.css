@@ -23,6 +23,10 @@
     background-color: #db2828;
 }
 
+.card-desc{
+    word-wrap: break-word; 
+}
+
 .post-image-container{
     object-fit: contain !important; 
 }

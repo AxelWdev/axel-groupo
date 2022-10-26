@@ -30,7 +30,9 @@ function PostCard({
         <Card.Header>{username}</Card.Header>
         <Card.Meta >{moment(createdAt).fromNow(true)}</Card.Meta>
         <Card.Description>
-          {body}
+          <div className='card-desc'>
+            {body}
+          </div>
           <div className="post-image-container">
             <img src={url} alt='post' className="post-image"></img>
           </div>

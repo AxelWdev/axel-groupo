@@ -77,6 +77,11 @@ function PostForm(){
                     error={error ? true : false}
                     />
                 <div className="submit-text-image-button">
+                    <input 
+            type="file"
+            accept="image/*" 
+            onChange={handleFileChange}
+            ref={inputRef} />
                 <Button 
                 type="submit" 
                 color="teal"
@@ -85,11 +90,7 @@ function PostForm(){
                 </Button>
                 
             
-            <input 
-            type="file"
-            accept="image/*" 
-            onChange={handleFileChange}
-            ref={inputRef} />
+            
             </div>
 
             </Form.Field>

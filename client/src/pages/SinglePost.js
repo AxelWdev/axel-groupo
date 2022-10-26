@@ -66,7 +66,9 @@ function SinglePost(props) {
                                 <Card.Header>{username}</Card.Header>
                                 <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
                                 <Card.Description>
-                                    {body}
+                                    <div className='card-desc'>
+                                        {body}
+                                    </div>
                                     
                                 </Card.Description>
                                 <div className="flex-center">
