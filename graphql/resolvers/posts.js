@@ -1,5 +1,5 @@
 const { AuthenticationError, UserInputError } = require('apollo-server');
-
+const fs = require('fs');
 const Post = require('../../models/Post');
 const checkAuth = require('../../util/check-auth');
 
@@ -54,8 +54,12 @@ module.exports = {
         try {
             const post = await Post.findById(postId);
             if (user.username === post.username) {
-            await post.delete();
-            return 'Post supprimé avec succès';
+                let url = post.url;
+                let fileName = url.split('/').pop();
+                
+                fs.unlink(`public/images/${fileName}`, function(){console.log("Deleted image")});
+                await post.delete();
+                return 'Post supprimé avec succès';
             } else {
             throw new AuthenticationError('Action non autorisée');
             }
