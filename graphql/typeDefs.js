@@ -35,6 +35,7 @@ module.exports = gql`
         token:String!
         username:String!
         createdAt:String!
+        isAdmin: Boolean!
     }
     input RegisterInput{
         username: String!

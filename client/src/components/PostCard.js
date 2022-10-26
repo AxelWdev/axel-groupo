@@ -47,7 +47,7 @@ function PostCard({
           </Label>
         </Button>
       </Card.Content>
-      { user && user.username === username && <DeleteButton postId={id}/>}
+      { user && (user.username === username || user.isAdmin) && <DeleteButton postId={id}/>}
       
     </Card>
   )

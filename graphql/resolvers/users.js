@@ -12,7 +12,8 @@ function generateToken(user) {
         {
         id: user.id,
         email: user.email,
-        username: user.username
+        username: user.username,
+        isAdmin: user.isAdmin
         },
         process.env.JWT,
         { expiresIn: '1h' }
@@ -46,6 +47,7 @@ module.exports = {
                 ...user._doc,
                 id: user._id,
                 token
+                
             }
         },
 
@@ -69,7 +71,8 @@ module.exports = {
                 email,
                 username,
                 password,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                isAdmin: false
             })
 
             const res = await newUser.save();
@@ -80,6 +83,7 @@ module.exports = {
                 ...res._doc,
                 id: res._id,
                 token
+                
             }
         }
     }

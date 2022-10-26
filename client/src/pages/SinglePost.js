@@ -89,7 +89,7 @@ function SinglePost(props) {
                                             {commentCount}
                                         </Label>
                                 </Button>
-                                {user && user.username === username && (
+                                {user && (user.username === username || user.isAdmin) && (
                                     <DeleteButton postId={id} callback={deletePostCallback} />
                                 )}
                             </Card.Content>
@@ -121,7 +121,7 @@ function SinglePost(props) {
                             
                                 <Card fluid key={comment.id}>
                                     <Card.Content>
-                                        {user && user.username === comment.username && (
+                                        {user && (user.username === comment.username || user.isAdmin) && (
                                             <DeleteButton postId={id} commentId={comment.id}/>
                                         )}
                                         <Card.Header>{comment.username}</Card.Header>

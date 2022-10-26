@@ -27,13 +27,13 @@ module.exports = {
             } else throw new UserInputError('Post non trouvé')
         },
         async deleteComment(_, { postId, commentId }, context){
-            const { username } = checkAuth(context);
+            const { username, isAdmin } = checkAuth(context);
 
             const post = await Post.findById(postId);
             if(post){
                 const commentIndex = post.comments.findIndex(c => c.id === commentId);
                 
-                if(post.comments[commentIndex].username === username){
+                if(post.comments[commentIndex].username === username || isAdmin){
                     post.comments.splice(commentIndex, 1);
                     await post.save();
                     return post;
