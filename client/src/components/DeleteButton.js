@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { FETCH_POSTS_QUERY } from '../util/graphql';
 
 
-import { Card, Button, Icon, Confirm } from 'semantic-ui-react';
+import { Button, Icon, Confirm } from 'semantic-ui-react';
 
 
 
@@ -32,7 +32,6 @@ function DeleteButton({ postId, commentId, callback }){
     })
     return (
         <>
-            <Card.Content className='delete-container'>
                 <Button className='delete-button' 
                     as='div' 
                     color='red' 
@@ -47,7 +46,7 @@ function DeleteButton({ postId, commentId, callback }){
                     content='Confirmer la suppression ?'
                     cancelButton='Annuler'
                     confirmButton="Supprimer" />
-            </Card.Content>
+
         </>
     )
 }

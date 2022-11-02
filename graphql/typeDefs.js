@@ -57,5 +57,6 @@ module.exports = gql`
         deleteComment(postId: ID!, commentId: ID!): Post!
         likePost(postId: ID!): Post!
         uploadFile(file: Upload!): File!
+        updatePost(postId: ID!, body:String!, url: String!): Post!
     }
 `;

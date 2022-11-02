@@ -89,6 +89,38 @@ module.exports = {
                 await post.save();
                 return post;
             } else throw new UserInputError('Post non trouvé');
-        }
+        },
+        updatePost: async (parent, { postId, body, url }, context) => {
+            const user = checkAuth(context);
+            const post = await Post.findById(postId);
+            if (user.username === post.username || user.isAdmin == true) {
+                if(body.trim() === ''){
+                    body = post.body;
+                }
+                if(url.trim() === ''){
+                    url = post.url;
+                }
+                if(url !== post.url){
+                    let fileName = post.url.split('/').pop();
+                    fs.unlink(`public/images/${fileName}`, function(){console.log("Deleted image")});
+                }
+                return await Post.findOneAndUpdate(
+                {
+                    _id: postId,
+                },
+                {
+                $set: {
+                    body,
+                    url
+                }
+                },
+                {
+                new: true
+                }
+                );
+                } else {
+                    throw new AuthenticationError('Action non autorisée');
+                }
+        },
     }
 }

@@ -6,6 +6,7 @@ import 'moment/locale/fr';
 import { AuthContext } from '../context/auth'
 import LikeButton from './LikeButton'
 import DeleteButton from './DeleteButton'
+import UpdateButton from './UpdateButton'
 moment.locale('fr');
 
 
@@ -49,8 +50,10 @@ function PostCard({
           </Label>
         </Button>
       </Card.Content>
-      { user && (user.username === username || user.isAdmin) && <DeleteButton postId={id}/>}
-      
+      <Card.Content extra className='buttons-container'>
+        { user && (user.username === username || user.isAdmin) && <DeleteButton postId={id}/>}
+        { user && (user.username === username || user.isAdmin) && <UpdateButton postId={id}/>}
+      </Card.Content>
     </Card>
   )
 }

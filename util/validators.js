@@ -13,7 +13,7 @@ module.exports.validateRegisterInput = (
     } else{
         const regEx = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;
         if(!email.match(regEx)){
-            errors.email = "L'email doit être une adress mail valide"
+            errors.email = "L'email doit être une adresse mail valide"
         }
     }
     if (password === ''){

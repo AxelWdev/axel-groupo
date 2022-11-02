@@ -7,17 +7,17 @@ import { useForm } from '../util/hooks'
 import { AuthContext } from '../context/auth'
 import { FETCH_POSTS_QUERY } from '../util/graphql'
 
-function PostForm(){
+function UpdatePostForm({post:{id, body, url}}){
     const inputRef = useRef(null);
     const { user } = useContext(AuthContext);
 
-    const {values, onChange, onSubmit } = useForm(createPostCallback, {
-        body: '',
-        url:''
+    const {values, onChange, onSubmit } = useForm(updatePostCallback, {
+        body: "",
+        url: ""
     });
 
-    const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
-        variables: { body: values.body, url: values.url},
+    const [updatePost, { error }] = useMutation(UPDATE_POST_MUTATION, {
+        variables: { postId: id, body: values.body, url: values.url},
         update(proxy, result) {
         const data = proxy.readQuery({
             query: FETCH_POSTS_QUERY,
@@ -25,7 +25,7 @@ function PostForm(){
         proxy.writeQuery({
             query: FETCH_POSTS_QUERY,
             data: {
-                getPosts: [result.data.createPost, ...data.getPosts],
+                getPosts: [result.data.updatePost, ...data.getPosts],
             },
         });
         values.body = "";
@@ -38,7 +38,7 @@ function PostForm(){
     const [uploadFile] = useMutation(UPLOAD_FILE, {
         onCompleted(data){
             values.url = data.uploadFile.url;
-            
+            console.log(data)
         }
 
     })
@@ -60,8 +60,8 @@ function PostForm(){
     
 
 
-    function createPostCallback(){
-        createPost()
+    function updatePostCallback(){
+        updatePost()
     }
 
     return ( user ? (
@@ -107,15 +107,15 @@ function PostForm(){
         </>
         ) : ( 
         <div>
-            <p>Connectez vous pour créer un post</p>
+            <p>Connectez vous pour modifier le post</p>
         </div>)
     )
     
 }
 
-const CREATE_POST_MUTATION = gql`
-mutation createPost($body: String!, $url:String!){
-    createPost(body: $body, url: $url) {
+const UPDATE_POST_MUTATION = gql`
+mutation updatePost($postId:ID!, $body: String!, $url:String!){
+    updatePost(id: $postId, body: $body, url: $url) {
         id body url createdAt username
         likes{
             id username createdAt
@@ -137,4 +137,4 @@ const UPLOAD_FILE = gql`
     }
 `
 
-export default PostForm
+export default UpdatePostForm

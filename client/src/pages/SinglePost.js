@@ -8,11 +8,15 @@ import 'moment/locale/fr';
 import LikeButton from '../components/LikeButton';
 import DeleteButton from '../components/DeleteButton'
 
+
 import {AuthContext} from '../context/auth';
 
 moment.locale('fr');
 
 function SinglePost(props) {
+    const inputRef = useRef(null);
+    const[updateUrl, setUpdateUrl]=useState('');
+    const[updateBody, setUpdateBody]=useState('');
     const navigate = useNavigate();
     const { postId } = useParams();
     const { user } = useContext(AuthContext);
@@ -25,6 +29,41 @@ function SinglePost(props) {
             postId
         }
     })
+
+    const [updatePost, { error }] = useMutation(UPDATE_POST_MUTATION, {
+        variables: {
+            postId,
+            body: updateBody,
+            url: updateUrl,
+        },
+        onCompleted(){
+            setUpdateUrl("");
+            setUpdateBody("");
+        }
+        
+    });
+
+    const [uploadFile] = useMutation(UPLOAD_FILE, {
+        onCompleted(data){
+            setUpdateUrl(data.uploadFile.url);
+            console.log(data)
+        }
+
+    })
+
+    const handleFileChange = e => {
+        const file = e.target.files[0]
+        
+        if(!file) return
+        uploadFile({variables: { file }})
+        
+    }
+
+    const resetFileInput = () => {
+    //  reset input value
+    inputRef.current.value = null;
+};
+    
 
     const[submitComment]=useMutation(SUBMIT_COMMENT_MUTATION, {
         update(){
@@ -55,11 +94,50 @@ function SinglePost(props) {
             commentCount,
             url
         } = getPost;
-        console.log(getPost) 
 
         postMarkup = (
             <Grid style={{marginTop: 20}}>
+                { user && (user.username === username || user.isAdmin) && <>
                 <Grid.Row>
+                <Form onSubmit={() => updatePost()} style={{padding: 14}}>
+                    <h2>Modifier le post</h2>
+                    <Form.Field>
+                        <Form.Input
+                            placeholder="Post..."
+                            name="body"
+                            onChange={(e) => setUpdateBody(e.target.value)}
+                            error={error ? true : false}
+                            autoComplete="off"
+                            value={updateBody}
+                            />
+                        <div className="submit-text-image-button">
+                            <input 
+                                type="file"
+                                accept="image/*" 
+                                onChange={handleFileChange}
+                                ref={inputRef} />
+                            <Button 
+                                type="submit" 
+                                color="teal"
+                                onClick={resetFileInput}>
+                                Envoyer
+                            </Button>
+                    </div>
+                        {error && (
+                            <div className="ui error message" style={{marginBottom: 20}}>
+                                <ul className="list">
+                                    <li>{error.graphQLErrors[0].message}</li>
+                                </ul>
+                            </div>
+                    ) }
+
+                    </Form.Field>
+                    
+                </Form>
+                </Grid.Row>
+                </>}
+                <Grid.Row>
+                    
                     <Grid.Column>
                         <Card fluid>
                             <Card.Content>
@@ -108,7 +186,8 @@ function SinglePost(props) {
                                         name='comment'
                                         value={comment}
                                         onChange={event => setComment(event.target.value)}
-                                        ref={commentInputRef} />
+                                        ref={commentInputRef}
+                                        autoComplete='off' />
                                         <button type='submit'
                                             className='ui button teal'
                                             disabled={comment.trim() === ''}
@@ -168,5 +247,29 @@ const FETCH_POSTS_QUERY = gql`
         }
     }
 `
+
+const UPDATE_POST_MUTATION = gql`
+    mutation($postId: ID!, $body: String!, $url: String!){
+        updatePost(postId: $postId, body: $body, url: $url){
+            id body url createdAt username likeCount
+            likes{
+                username
+            }
+            commentCount
+            comments{
+                id username createdAt body
+            }
+        }
+    }
+`
+
+const UPLOAD_FILE = gql`
+    mutation uploadFile($file: Upload!){
+        uploadFile(file: $file){
+            url
+        }
+    }
+`
+
 
 export default SinglePost;
