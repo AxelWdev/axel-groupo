@@ -1,5 +1,6 @@
 const { ApolloServer } = require('apollo-server-express');
 const express = require('express');
+const helmet = require('helmet')
 const {
   GraphQLUpload, // The GraphQL "Upload" Scalar
   graphqlUploadExpress, // The Express middleware.
@@ -28,6 +29,9 @@ app.use(graphqlUploadExpress());
 
 server.applyMiddleware({ app }); 
 app.use(cors());
+app.use(helmet({ contentSecurityPolicy: (process.env.NODE_ENV === 'production') ? undefined : false, 
+                crossOriginEmbedderPolicy: false,
+                crossOriginResourcePolicy: false, }));
 app.use(express.static('public'));
 
 
