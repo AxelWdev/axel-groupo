@@ -76,6 +76,7 @@ function PostForm(){
                     value={values.body}
                     error={error ? true : false}
                     autoComplete="off"
+                    maxLength="200"
                     />
                 <div className="submit-text-image-button">
                     <input 

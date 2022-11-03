@@ -17,6 +17,7 @@ function Home(){
         <div>
             <Grid columns={3}>
                 <Grid.Row className='page-title'>
+                    
                     <h1>Derniers posts</h1>
                 </Grid.Row>
                 <Grid.Row>
