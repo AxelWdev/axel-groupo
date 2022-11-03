@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
-import { Card,  Image, Button, Icon, Label } from 'semantic-ui-react';
+import { Card, Button, Icon, Label } from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 import moment from 'moment';
 import 'moment/locale/fr';
 import { AuthContext } from '../context/auth'
 import LikeButton from './LikeButton'
 import DeleteButton from './DeleteButton'
+import UpdateButton from './UpdateButton'
 moment.locale('fr');
 
 
@@ -20,17 +21,14 @@ function PostCard({
 
   
   return (
-    <Card fluid>
+    <Card fluid className='card-home'>
       <Card.Content>
-        <Image
-          floated='right'
-          size='mini'
-          src='https://react.semantic-ui.com/images/avatar/large/elliot.jpg'
-        />
         <Card.Header>{username}</Card.Header>
         <Card.Meta >{moment(createdAt).fromNow(true)}</Card.Meta>
         <Card.Description>
-          {body}
+          <div className='card-desc'>
+            {body}
+          </div>
           <div className="post-image-container">
             <img src={url} alt='post' className="post-image"></img>
           </div>
@@ -47,8 +45,12 @@ function PostCard({
           </Label>
         </Button>
       </Card.Content>
-      { user && user.username === username && <DeleteButton postId={id}/>}
-      
+      { user && (user.username === username || user.isAdmin) && <>
+        <Card.Content extra className="buttons-container">
+          <DeleteButton postId={id}/>
+          <UpdateButton postId={id}/>
+        </Card.Content>
+      </>}
     </Card>
   )
 }

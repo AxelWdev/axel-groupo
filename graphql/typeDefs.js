@@ -35,6 +35,7 @@ module.exports = gql`
         token:String!
         username:String!
         createdAt:String!
+        isAdmin: Boolean!
     }
     input RegisterInput{
         username: String!
@@ -56,5 +57,6 @@ module.exports = gql`
         deleteComment(postId: ID!, commentId: ID!): Post!
         likePost(postId: ID!): Post!
         uploadFile(file: Upload!): File!
+        updatePost(postId: ID!, body:String!, url: String!): Post!
     }
 `;

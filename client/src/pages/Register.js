@@ -108,7 +108,7 @@ const REGISTER_USER = gql`
                 confirmPassword: $confirmPassword
             }
         ){
-            id email username createdAt token
+            id email username createdAt token isAdmin
         }
     }
 `

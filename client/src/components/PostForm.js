@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { Form, Button } from 'semantic-ui-react'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
@@ -8,6 +8,7 @@ import { AuthContext } from '../context/auth'
 import { FETCH_POSTS_QUERY } from '../util/graphql'
 
 function PostForm(){
+    const inputRef = useRef(null);
     const { user } = useContext(AuthContext);
 
     const {values, onChange, onSubmit } = useForm(createPostCallback, {
@@ -37,20 +38,24 @@ function PostForm(){
     const [uploadFile] = useMutation(UPLOAD_FILE, {
         onCompleted(data){
             values.url = data.uploadFile.url;
-            console.log(values.url)
-            console.log(values)
+            
         }
 
     })
 
     const handleFileChange = e => {
         const file = e.target.files[0]
+        
         if(!file) return
         uploadFile({variables: { file }})
+        
     }
 
 
-    
+    const resetFileInput = () => {
+    //  reset input value
+    inputRef.current.value = null;
+};
         
     
 
@@ -70,14 +75,24 @@ function PostForm(){
                     onChange={onChange}
                     value={values.body}
                     error={error ? true : false}
+                    autoComplete="off"
+                    maxLength="200"
                     />
                 <div className="submit-text-image-button">
-                <Button type="submit" color="teal">
+                    <input 
+            type="file"
+            accept="image/*" 
+            onChange={handleFileChange}
+            ref={inputRef} />
+                <Button 
+                type="submit" 
+                color="teal"
+                onClick={resetFileInput}>
                     Envoyer
                 </Button>
                 
             
-            <input type="file" onChange={handleFileChange} />
+            
             </div>
 
             </Form.Field>

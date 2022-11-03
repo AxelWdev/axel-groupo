@@ -1,9 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const {
-  GraphQLUpload, // The GraphQL "Upload" Scalar
-  graphqlUploadExpress, // The Express middleware.
-} = require('graphql-upload');
+
 
 function generateRandomString(length) {
     var result           = '';

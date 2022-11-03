@@ -35,7 +35,7 @@ app.use(express.static('public'));
 
 
 mongoose.connect(process.env.MONGO_DB_URI,
-    { useNewUrlParser: true, useUnifiedTopology: true })
+    { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !')
 );
