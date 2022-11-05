@@ -1,7 +1,12 @@
-# axel-groupo Réseau social
-1. npm install depuis la racine pour installer les dependencies backend
-2. npm install depuis le dossier client pour installer les dependencies frontend
-3. Editer le .env avec vos informations
-4. npm run server depuis la racine
-5. npm run start depuis le dossier client
-6. se rendre à http://localhost:3000
+# Réseau social utilisant ReactJS et Apollo/graphql/MongoDB
+
+### Installation du code
+
+1.Cloner le repo 
+```
+git clone https://github.com/AxelWdev/axel-groupo.git
+```
+2. Editer le .env.example avec vos informations et renommer le fichier en .env
+3. Depuis la racine, `npm install`  installer les dependencies backend, puis `npm run server` pour lancer le backend.
+4. Depuis le dossier client, `npm install`  pour installer les dependencies frontend puis `npm run start` pour lancer le frontend.
+5. Se rendre à http://localhost:3000 pour accéder au site. 
