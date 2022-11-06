@@ -1,4 +1,4 @@
-# Réseau social utilisant ReactJS et Apollo/graphql/MongoDB
+# Réseau social avec React et Apollo/graphql/MongoDB
 
 ### Installation du code
 
