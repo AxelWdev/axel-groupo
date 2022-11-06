@@ -12,6 +12,6 @@ git clone https://github.com/AxelWdev/axel-groupo.git
 
 *  Depuis la racine, `npm install`  installer les dependencies backend, puis `npm run server` pour lancer le backend.
 
-* `npm Depuis le dossier client, `npm install`  pour installer les dependencies frontend puis `npm run start` pour lancer le frontend.
+* Depuis le dossier client, `npm install`  pour installer les dependencies frontend puis `npm run start` pour lancer le frontend.
 
 *  Se rendre à http://localhost:3000 pour accéder au site. 
